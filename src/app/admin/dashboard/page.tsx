@@ -57,8 +57,16 @@ export default function Dashboard() {
     }
 
     Promise.all([
-      fetch("/api/track").then(res => res.json()),
-      fetch("/api/products").then(res => res.json())
+      fetch("/api/track").then(async res => {
+          const json = await res.json();
+          if (!res.ok || json.error) throw new Error(json.error || "API error");
+          return json;
+      }),
+      fetch("/api/products").then(async res => {
+          const json = await res.json();
+          if (!res.ok || json.error) throw new Error(json.error || "API error");
+          return json;
+      })
     ])
       .then(([trackData, productsData]) => {
         setData(trackData);
