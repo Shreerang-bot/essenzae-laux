@@ -21,8 +21,14 @@ export default function Collection() {
 
   useEffect(() => {
     fetch("/api/products", { cache: "no-store" })
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("API failed");
+        return res.json();
+      })
       .then((data) => {
+        if (!Array.isArray(data)) {
+            data = [];
+        }
         setProducts(data);
         
         // Initialize image indexes for products that might have multiple images
@@ -34,7 +40,10 @@ export default function Collection() {
         
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+          setProducts([]);
+          setLoading(false);
+      });
   }, []);
 
   const handleNextImage = (productId: string, totalImages: number) => {
