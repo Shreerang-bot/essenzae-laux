@@ -1,69 +1,92 @@
 import { NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
-
-const dataFilePath = path.join(process.cwd(), "data", "products.json");
-
-async function readProducts() {
-  try {
-    const file = await fs.readFile(dataFilePath, "utf8");
-    return JSON.parse(file);
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return [];
-    }
-    throw error;
-  }
-}
-
-async function writeProducts(data: any) {
-  await fs.writeFile(dataFilePath, JSON.stringify(data, null, 2), "utf8");
-}
+import { supabase } from "@/lib/supabase";
 
 export async function GET() {
   try {
-    const products = await readProducts();
-    return NextResponse.json(products);
+    const { data: products, error } = await supabase
+      .from("products")
+      .select("*")
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    // Ensure camelCase properties are mapped correctly, as Postgres forces lowercase 
+    // unless columns were quoted.
+    const mapped = (products || []).map((p) => ({
+      ...p,
+      amazonUrl: p.amazonUrl || p.amazonurl,
+    }));
+
+    return NextResponse.json(mapped);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to read products" }, { status: 500 });
+    console.error("Supabase GET Error:", error);
+    return NextResponse.json({ error: "Failed to read products from Supabase" }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const products = await readProducts();
     
     // Simulate simple ID generation if not provided
     if (!body.id) {
       body.id = `sku-${Date.now()}`;
     }
+
+    // Prepare payload to handle postgres case-sensitivities
+    const payload = {
+        id: body.id,
+        name: body.name,
+        price: body.price,
+        description: body.description,
+        amazonurl: body.amazonUrl, // Mapped to postgres
+        images: body.images || []
+    };
     
-    products.push(body);
-    await writeProducts(products);
-    
-    return NextResponse.json(body, { status: 201 });
+    const { data, error } = await supabase
+      .from("products")
+      .insert([payload])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    return NextResponse.json(data, { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to create product" }, { status: 500 });
+    console.error("Supabase POST Error:", error);
+    return NextResponse.json({ error: "Failed to create product in Supabase" }, { status: 500 });
   }
 }
 
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const products = await readProducts();
     
-    const index = products.findIndex((p: any) => p.id === body.id);
-    if (index === -1) {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    if (!body.id) {
+        return NextResponse.json({ error: "Missing ID" }, { status: 400 });
     }
+
+    const payload = {
+        name: body.name,
+        price: body.price,
+        description: body.description,
+        amazonurl: body.amazonUrl,
+        images: body.images || []
+    };
     
-    products[index] = { ...products[index], ...body };
-    await writeProducts(products);
+    const { data, error } = await supabase
+      .from("products")
+      .update(payload)
+      .eq("id", body.id)
+      .select()
+      .single();
+
+    if (error) throw error;
     
-    return NextResponse.json(products[index]);
+    return NextResponse.json(data);
   } catch (error) {
-    return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
+    console.error("Supabase PUT Error:", error);
+    return NextResponse.json({ error: "Failed to update product in Supabase" }, { status: 500 });
   }
 }
 
@@ -76,18 +99,16 @@ export async function DELETE(req: Request) {
       return NextResponse.json({ error: "Missing ID parameter" }, { status: 400 });
     }
     
-    let products = await readProducts();
-    const initialLength = products.length;
-    products = products.filter((p: any) => p.id !== id);
-    
-    if (products.length === initialLength) {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
-    }
-    
-    await writeProducts(products);
+    const { error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", id);
+        
+    if (error) throw error;
     
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: "Failed to delete product" }, { status: 500 });
+    console.error("Supabase DELETE Error:", error);
+    return NextResponse.json({ error: "Failed to delete product from Supabase" }, { status: 500 });
   }
 }
