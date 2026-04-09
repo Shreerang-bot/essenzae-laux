@@ -17,7 +17,7 @@ export default function StickyFooter() {
           </div>
         </div>
         <button
-          onClick={trackAndRedirect}
+          onClick={() => trackAndRedirect("https://www.amazon.com/dp/placeholder", "sticky-footer-buy")}
           id="sticky-buy-btn"
           className="bg-gradient-to-r from-amazon-yellow to-amazon-yellow-dark text-charcoal font-bold text-sm px-6 py-3 rounded-full flex items-center gap-2 shadow-lg hover:shadow-xl transition-all active:scale-95"
         >
