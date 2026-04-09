@@ -1,0 +1,62 @@
+[
+  {
+    "id": "sku-midnight-oud",
+    "name": "Midnight Oud",
+    "description": "Rich, deep woody notes with a hint of warm spice.",
+    "price": 399,
+    "images": [
+      "/product_midnight_oud.png"
+    ],
+    "amazonLink": "https://www.amazon.in/dp/PLACEHOLDER_OUD"
+  },
+  {
+    "id": "sku-vanilla-woods",
+    "name": "Vanilla Woods",
+    "description": "Sweet Madagascar vanilla blended with smooth sandalwood.",
+    "price": 399,
+    "images": [
+      "/product_vanilla_woods.png"
+    ],
+    "amazonLink": "https://www.amazon.in/dp/PLACEHOLDER_VANILLA"
+  },
+  {
+    "id": "sku-citrus-breeze",
+    "name": "Citrus Breeze",
+    "description": "Energizing Sicilian lemon and sweet orange zest.",
+    "price": 399,
+    "images": [
+      "/product_citrus_breeze.png"
+    ],
+    "amazonLink": "https://www.amazon.in/dp/PLACEHOLDER_CITRUS"
+  },
+  {
+    "id": "sku-ocean-mist",
+    "name": "Ocean Mist",
+    "description": "Crisp aquatic notes with a refreshing sea salt finish.",
+    "price": 399,
+    "images": [
+      "/product_ocean_mist.png"
+    ],
+    "amazonLink": "https://www.amazon.in/dp/PLACEHOLDER_OCEAN"
+  },
+  {
+    "id": "sku-lavender-bloom",
+    "name": "Lavender Bloom",
+    "description": "Calming French lavender to soothe your senses.",
+    "price": 399,
+    "images": [
+      "/product_lavender_bloom.png"
+    ],
+    "amazonLink": "https://www.amazon.in/dp/PLACEHOLDER_LAVENDER"
+  },
+  {
+    "id": "sku-rose-petal",
+    "name": "Rose Petal",
+    "description": "Delicate and romantic wild rose with musk undertones.",
+    "price": 399,
+    "images": [
+      "/product_rose_petal.png"
+    ],
+    "amazonLink": "https://www.amazon.in/dp/PLACEHOLDER_ROSE"
+  }
+]
