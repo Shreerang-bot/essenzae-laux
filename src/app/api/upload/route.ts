@@ -24,13 +24,17 @@ export async function POST(req: Request) {
     const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
     const filename = `products/${uniqueSuffix}-${safeName}`;
 
-    // Upload to Vercel Blob — explicitly pass the token
+    // Upload to Vercel Blob — use private access (matches the store configuration)
     const blob = await put(filename, file, {
-      access: "public",
+      access: "private",
       token,
     });
 
-    return NextResponse.json({ url: blob.url });
+    // Return a proxy URL so the frontend can display the image
+    // through our /api/blob proxy which has the read token
+    const proxyUrl = `/api/blob?url=${encodeURIComponent(blob.url)}`;
+
+    return NextResponse.json({ url: proxyUrl });
   } catch (error: any) {
     console.error("Blob upload error:", error?.message || error);
     return NextResponse.json(

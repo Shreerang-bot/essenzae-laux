@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import {
   Leaf,
   LayoutDashboard,
@@ -264,7 +263,7 @@ export default function ProductsAdmin() {
                         <div className="flex items-center gap-4">
                             <div className="w-12 h-12 bg-white rounded-lg border border-cream-dark/30 p-1 flex items-center justify-center overflow-hidden">
                                 {p.images && p.images[0] ? (
-                                    <Image src={p.images[0]} width={40} height={40} className="object-cover" alt={p.name} />
+                                    <img src={p.images[0]} width={40} height={40} className="object-cover rounded" alt={p.name} />
                                 ) : (
                                     <span className="text-[10px] text-charcoal/30">N/A</span>
                                 )}
@@ -351,7 +350,7 @@ export default function ProductsAdmin() {
                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
                     {images.map((img, i) => (
                         <div key={i} className="group relative aspect-square bg-cream rounded-lg overflow-hidden border border-cream-dark">
-                            <Image src={img} alt="Product image" fill className="object-cover" />
+                            <img src={img} alt="Product image" className="absolute inset-0 w-full h-full object-cover" />
                             <button type="button" onClick={() => removeImage(i)} className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md hover:scale-110">
                                 <X className="w-3 h-3" />
                             </button>

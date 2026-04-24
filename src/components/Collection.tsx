@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { ShoppingBag, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import { trackAndRedirect } from "@/lib/track";
 
@@ -108,11 +107,10 @@ export default function Collection() {
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent to-forest-dark/80 z-10" />
                   
                   {product.images[currentImgIndex] ? (
-                    <Image
+                    <img
                       src={product.images[currentImgIndex]}
                       alt={product.name}
-                      fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-32 h-32 bg-forest-light/50 rounded-xl flex items-center justify-center">
