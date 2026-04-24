@@ -13,14 +13,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { error } = await supabase
-      .from("product_clicks")
-      .insert([
-        {
-          event_type: event,
-          sku_id: skuId || null,
-        }
-      ]);
+    const { error } = await supabase.from("product_clicks").insert({
+      event_type: event,
+      sku_id: skuId || null,
+    });
 
     if (error) throw error;
 
@@ -36,15 +32,15 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    // Fetch last 7 days of events from Supabase
+    // Fetch last 7 days of events
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    
-    // In dev mode without keys, this may fail so catch it gracefully
+
     const { data: events, error } = await supabase
-      .from('product_clicks')
-      .select('event_type, sku_id, created_at')
-      .gte('created_at', sevenDaysAgo.toISOString());
+      .from("product_clicks")
+      .select("*")
+      .gte("created_at", sevenDaysAgo.toISOString())
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
 
@@ -69,9 +65,14 @@ export async function GET() {
       }
     }
 
-    const totalViews = safeEvents.filter((e) => e.event_type === "page_view").length;
-    const totalClicks = safeEvents.filter((e) => e.event_type === "amazon_click").length;
-    const ctr = totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(1) : "0.0";
+    const totalViews = safeEvents.filter(
+      (e) => e.event_type === "page_view"
+    ).length;
+    const totalClicks = safeEvents.filter(
+      (e) => e.event_type === "amazon_click"
+    ).length;
+    const ctr =
+      totalViews > 0 ? ((totalClicks / totalViews) * 100).toFixed(1) : "0.0";
 
     const skuStats: Record<string, number> = {};
     for (const ev of safeEvents) {
@@ -79,11 +80,16 @@ export async function GET() {
         skuStats[ev.sku_id] = (skuStats[ev.sku_id] || 0) + 1;
       }
     }
-    const productPerformance = Object.entries(skuStats).map(([skuId, clicks]) => ({
-      skuId,
-      clicks,
-      ctr: totalViews > 0 ? ((clicks / totalViews) * 100).toFixed(1) : "0.0"
-    })).sort((a,b) => b.clicks - a.clicks);
+    const productPerformance = Object.entries(skuStats)
+      .map(([skuId, clicks]) => ({
+        skuId,
+        clicks,
+        ctr:
+          totalViews > 0
+            ? ((clicks / totalViews) * 100).toFixed(1)
+            : "0.0",
+      }))
+      .sort((a, b) => b.clicks - a.clicks);
 
     const chartData = Object.entries(dailyData).map(([date, data]) => ({
       date,
@@ -104,6 +110,9 @@ export async function GET() {
     });
   } catch (error) {
     console.error("Supabase Track GET Error:", error);
-    return NextResponse.json({ error: "Failed to read analytics from Supabase" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to read analytics" },
+      { status: 500 }
+    );
   }
 }
