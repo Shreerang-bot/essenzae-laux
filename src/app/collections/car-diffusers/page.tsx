@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CollectionGrid from "@/components/CollectionGrid";
+import QualityPromise from "@/components/QualityPromise";
+import Testimonials from "@/components/Testimonials";
 
 interface Product {
   id: string;
@@ -51,6 +53,8 @@ export default function CarDiffusersPage() {
           />
         </div>
       )}
+      <QualityPromise />
+      <Testimonials />
       <Footer />
     </main>
   );
