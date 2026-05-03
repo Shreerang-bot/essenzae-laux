@@ -20,6 +20,8 @@ interface Product {
   name: string;
   description: string;
   price: number;
+  originalPrice: number;
+  category: string;
   images: string[];
   amazonLink: string;
 }
@@ -35,7 +37,9 @@ export default function ProductsAdmin() {
   // Form State
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(399);
+  const [price, setPrice] = useState(999);
+  const [originalPrice, setOriginalPrice] = useState(1499);
+  const [category, setCategory] = useState("reed-diffusers");
   const [amazonLink, setAmazonLink] = useState("");
   const [images, setImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -74,13 +78,17 @@ export default function ProductsAdmin() {
       setName(product.name);
       setDescription(product.description);
       setPrice(product.price);
+      setOriginalPrice(product.originalPrice || 0);
+      setCategory(product.category || "reed-diffusers");
       setAmazonLink(product.amazonLink);
       setImages(product.images || []);
     } else {
       setEditingId(null);
       setName("");
       setDescription("");
-      setPrice(399);
+      setPrice(999);
+      setOriginalPrice(1499);
+      setCategory("reed-diffusers");
       setAmazonLink("");
       setImages([]);
     }
@@ -95,6 +103,8 @@ export default function ProductsAdmin() {
       name,
       description,
       price,
+      originalPrice,
+      category,
       amazonLink,
       images,
     };
@@ -251,6 +261,7 @@ export default function ProductsAdmin() {
                 <thead className="bg-forest/5 border-b border-cream-dark/50">
                   <tr>
                     <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider">Product</th>
+                    <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider">Category</th>
                     <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider">Price</th>
                     <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider">WhatsApp Link</th>
                     <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider text-right">Actions</th>
@@ -274,7 +285,17 @@ export default function ProductsAdmin() {
                             </div>
                         </div>
                       </td>
-                      <td className="py-4 px-6 font-medium text-forest">₹{p.price}</td>
+                      <td className="py-4 px-6">
+                        <span className="inline-block px-2 py-1 rounded-full text-xs font-semibold bg-forest/5 text-forest/70">
+                          {p.category === "car-diffusers" ? "Car" : "REED"}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6">
+                        <div className="font-medium text-forest">₹{p.price}</div>
+                        {p.originalPrice > p.price && (
+                          <div className="text-charcoal/40 line-through text-xs">₹{p.originalPrice}</div>
+                        )}
+                      </td>
                       <td className="py-4 px-6 text-charcoal/60 truncate max-w-[200px]">
                           <a href={p.amazonLink} target="_blank" className="hover:text-gold transition-colors">{p.amazonLink}</a>
                       </td>
@@ -290,7 +311,7 @@ export default function ProductsAdmin() {
                   ))}
                   {products.length === 0 && (
                     <tr>
-                      <td colSpan={4} className="py-12 text-center text-charcoal/40">No products configured yet.</td>
+                      <td colSpan={5} className="py-12 text-center text-charcoal/40">No products configured yet.</td>
                     </tr>
                   )}
                 </tbody>
@@ -320,7 +341,21 @@ export default function ProductsAdmin() {
                     <input type="text" required value={name} onChange={e => setName(e.target.value)} className="w-full bg-white border border-cream-dark rounded-xl px-4 py-2.5 text-forest focus:outline-none focus:border-gold transition-colors" />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-charcoal/60 uppercase tracking-wider mb-2">Price (₹)</label>
+                    <label className="block text-xs font-semibold text-charcoal/60 uppercase tracking-wider mb-2">Category</label>
+                    <select value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-white border border-cream-dark rounded-xl px-4 py-2.5 text-forest focus:outline-none focus:border-gold transition-colors">
+                      <option value="reed-diffusers">REED Diffusers</option>
+                      <option value="car-diffusers">Car Diffusers</option>
+                    </select>
+                  </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-semibold text-charcoal/60 uppercase tracking-wider mb-2">Original Price / MRP (₹)</label>
+                    <input type="number" required min="0" value={originalPrice} onChange={e => setOriginalPrice(Number(e.target.value))} className="w-full bg-white border border-cream-dark rounded-xl px-4 py-2.5 text-forest focus:outline-none focus:border-gold transition-colors" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-charcoal/60 uppercase tracking-wider mb-2">Discounted / Selling Price (₹)</label>
                     <input type="number" required min="0" value={price} onChange={e => setPrice(Number(e.target.value))} className="w-full bg-white border border-cream-dark rounded-xl px-4 py-2.5 text-forest focus:outline-none focus:border-gold transition-colors" />
                   </div>
               </div>

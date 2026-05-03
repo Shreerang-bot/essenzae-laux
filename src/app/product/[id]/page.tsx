@@ -22,7 +22,9 @@ interface Product {
   name: string;
   description: string;
   price: number;
+  originalPrice: number;
   images: string[];
+  category: string;
   amazonLink: string;
 }
 
@@ -228,12 +230,16 @@ export default function ProductDetail() {
                 <span className="font-[var(--font-playfair)] text-4xl font-bold text-forest">
                   ₹{product.price}
                 </span>
-                <span className="text-charcoal/40 line-through text-lg">
-                  ₹{Math.round(product.price * 1.75)}
-                </span>
-                <span className="bg-green-500/15 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">
-                  {Math.round((1 - product.price / (product.price * 1.75)) * 100)}% OFF
-                </span>
+                {product.originalPrice > product.price && (
+                  <>
+                    <span className="text-charcoal/40 line-through text-lg">
+                      ₹{product.originalPrice}
+                    </span>
+                    <span className="bg-green-500/15 text-green-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                      {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+                    </span>
+                  </>
+                )}
               </div>
 
               {/* Short Description */}

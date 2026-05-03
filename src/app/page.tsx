@@ -2,7 +2,6 @@
 
 import { useEffect, useRef } from "react";
 import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
 import Collection from "@/components/Collection";
 import Packaging from "@/components/Packaging";
 import QualityPromise from "@/components/QualityPromise";
@@ -29,7 +28,6 @@ export default function Home() {
       <Navbar />
       <Hero />
       <Collection />
-      <HowItWorks />
       <Packaging />
       <QualityPromise />
       <Testimonials />

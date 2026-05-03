@@ -9,7 +9,9 @@ interface Product {
   name: string;
   description: string;
   price: number;
+  originalPrice: number;
   images: string[];
+  category: string;
   amazonLink: string;
 }
 
@@ -119,8 +121,24 @@ export default function Collection() {
           </h2>
           <div className="section-divider mt-8" />
           <p className="text-cream/70 mt-6 max-w-2xl mx-auto text-lg font-light leading-relaxed">
-            Premium fragrances bound in luxurious aesthetic glass bottles. Hand-blown to compliment any car interior.
+            Premium fragrances in luxurious glass bottles — REED diffusers for your space, car diffusers for the road.
           </p>
+
+          {/* Category Quick Links */}
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <Link
+              href="/collections/reed-diffusers"
+              className="px-5 py-2 rounded-full border border-gold/30 text-gold text-sm font-medium hover:bg-gold/10 transition-colors duration-300"
+            >
+              REED Diffusers
+            </Link>
+            <Link
+              href="/collections/car-diffusers"
+              className="px-5 py-2 rounded-full border border-gold/30 text-gold text-sm font-medium hover:bg-gold/10 transition-colors duration-300"
+            >
+              Car Diffusers
+            </Link>
+          </div>
         </div>
 
         {/* Carousel Container */}
@@ -156,6 +174,9 @@ export default function Collection() {
             {products.map((product) => {
               const currentImgIndex = imageIndexes[product.id] || 0;
               const hasMultipleImages = product.images.length > 1;
+              const discount = product.originalPrice > product.price
+                ? Math.round((1 - product.price / product.originalPrice) * 100)
+                : 0;
 
               return (
                 <Link
@@ -215,10 +236,20 @@ export default function Collection() {
                     )}
 
                     {/* Price Badge */}
-                    <div className="absolute bottom-3 left-3 z-20">
+                    <div className="absolute bottom-3 left-3 z-20 flex items-baseline gap-2">
                       <span className="font-[var(--font-playfair)] text-2xl font-bold text-cream drop-shadow-lg">
                         ₹{product.price}
                       </span>
+                      {discount > 0 && (
+                        <>
+                          <span className="text-cream/40 line-through text-sm drop-shadow">
+                            ₹{product.originalPrice}
+                          </span>
+                          <span className="bg-green-500/20 text-green-400 text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                            {discount}% OFF
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
 

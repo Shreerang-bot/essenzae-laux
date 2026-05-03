@@ -1,12 +1,21 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const { data, error } = await supabase
+    const { searchParams } = new URL(req.url);
+    const category = searchParams.get("category");
+
+    let query = supabase
       .from("products")
       .select("*")
       .order("created_at", { ascending: false });
+
+    if (category) {
+      query = query.eq("category", category);
+    }
+
+    const { data, error } = await query;
 
     if (error) throw error;
 
@@ -15,7 +24,9 @@ export async function GET() {
       id: p.id,
       name: p.name,
       price: p.price,
+      originalPrice: p.original_price || 0,
       description: p.description,
+      category: p.category || "reed-diffusers",
       amazonLink: p.amazonUrl,
       images: p.images || [],
       created_at: p.created_at,
@@ -41,7 +52,9 @@ export async function POST(req: Request) {
       id,
       name: body.name,
       price: body.price,
+      original_price: body.originalPrice || body.original_price || 0,
       description: body.description,
+      category: body.category || "reed-diffusers",
       amazonUrl: body.amazonLink || body.amazonUrl || "",
       images: body.images || [],
     };
@@ -57,6 +70,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       {
         ...data,
+        originalPrice: data.original_price,
         amazonLink: data.amazonUrl,
       },
       { status: 201 }
@@ -81,7 +95,9 @@ export async function PUT(req: Request) {
     const updates = {
       name: body.name,
       price: body.price,
+      original_price: body.originalPrice || body.original_price || 0,
       description: body.description,
+      category: body.category || "reed-diffusers",
       amazonUrl: body.amazonLink || body.amazonUrl || "",
       images: body.images || [],
       updated_at: new Date().toISOString(),
@@ -98,6 +114,7 @@ export async function PUT(req: Request) {
 
     return NextResponse.json({
       ...data,
+      originalPrice: data.original_price,
       amazonLink: data.amazonUrl,
     });
   } catch (error) {
