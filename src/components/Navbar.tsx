@@ -24,7 +24,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
         <a
-          href="#"
+          href="/"
           className="flex items-center gap-2 group"
           id="nav-logo"
         >
@@ -43,7 +43,7 @@ export default function Navbar() {
           {["Collection", "How It Works", "Packaging"].map((item) => (
             <a
               key={item}
-              href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
+              href={`/#${item.toLowerCase().replace(/\s+/g, "-")}`}
               className="text-sm font-medium tracking-wide text-forest/80 hover:text-gold transition-colors duration-300"
             >
               {item}
@@ -69,7 +69,7 @@ export default function Navbar() {
             {["Collection", "How It Works", "Packaging"].map((item) => (
               <a
                 key={item}
-                href={`#${item.toLowerCase().replace(/\s+/g, "-")}`}
+                href={`/#${item.toLowerCase().replace(/\s+/g, "-")}`}
                 onClick={() => setMenuOpen(false)}
                 className="text-forest/80 text-sm font-medium py-2 hover:text-gold transition-colors"
               >

@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Essenzae Laux — Premium Hanging Fragrance Diffuser",
     description:
-      "Elevate your space with the luxury fragrance experience. Shop on Amazon.",
+      "Elevate your space with the luxury fragrance experience. Order via WhatsApp.",
     type: "website",
   },
 };

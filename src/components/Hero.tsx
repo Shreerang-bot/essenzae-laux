@@ -48,7 +48,7 @@ export default function Hero() {
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className="w-5 h-5 text-amazon-yellow fill-amazon-yellow"
+                  className="w-5 h-5 text-gold fill-gold"
                 />
               ))}
             </div>
@@ -80,7 +80,7 @@ export default function Hero() {
               Explore Collection
             </a>
             <p className="text-cream/40 text-xs mt-3 tracking-wide">
-              Free delivery with Amazon Prime
+              Fast delivery · Premium quality assured
             </p>
           </div>
         </div>

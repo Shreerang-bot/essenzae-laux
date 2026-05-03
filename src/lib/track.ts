@@ -1,10 +1,10 @@
-export async function trackAndRedirect(amazonUrl: string, skuId?: string) {
+export async function trackAndRedirect(url: string, skuId?: string) {
   try {
     await fetch("/api/track", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        event: "amazon_click",
+        event: "whatsapp_click",
         page: window.location.pathname,
         skuId: skuId || "unknown",
         timestamp: new Date().toISOString(),
@@ -13,8 +13,8 @@ export async function trackAndRedirect(amazonUrl: string, skuId?: string) {
   } catch {
     // Silently fail — don't block the redirect
   } finally {
-    if (amazonUrl && amazonUrl.startsWith("http")) {
-      window.open(amazonUrl, "_blank", "noopener,noreferrer");
+    if (url && url.startsWith("http")) {
+      window.open(url, "_blank", "noopener,noreferrer");
     }
   }
 }

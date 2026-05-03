@@ -252,7 +252,7 @@ export default function ProductsAdmin() {
                   <tr>
                     <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider">Product</th>
                     <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider">Price</th>
-                    <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider">Amazon Link</th>
+                    <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider">WhatsApp Link</th>
                     <th className="py-4 px-6 text-charcoal/40 font-semibold text-xs uppercase tracking-wider text-right">Actions</th>
                   </tr>
                 </thead>
@@ -331,8 +331,8 @@ export default function ProductsAdmin() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-charcoal/60 uppercase tracking-wider mb-2">Amazon Product Link</label>
-                <input type="url" required value={amazonLink} onChange={e => setAmazonLink(e.target.value)} placeholder="https://www.amazon.in/dp/..." className="w-full bg-white border border-cream-dark rounded-xl px-4 py-2.5 text-forest focus:outline-none focus:border-gold transition-colors" />
+                <label className="block text-xs font-semibold text-charcoal/60 uppercase tracking-wider mb-2">WhatsApp / Order Link</label>
+                <input type="url" required value={amazonLink} onChange={e => setAmazonLink(e.target.value)} placeholder="https://wa.me/919999999999?text=Hi" className="w-full bg-white border border-cream-dark rounded-xl px-4 py-2.5 text-forest focus:outline-none focus:border-gold transition-colors" />
               </div>
 
               <div className="border border-cream-dark rounded-xl p-4 bg-white/50">
