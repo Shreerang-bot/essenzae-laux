@@ -117,7 +117,7 @@ export default function ProductDetail() {
   );
   const whatsappUrl = product.amazonLink && product.amazonLink.startsWith("http")
     ? product.amazonLink
-    : `https://wa.me/919999999999?text=${whatsappMsg}`;
+    : `https://wa.me/917709219444?text=${whatsappMsg}`;
 
   return (
     <>

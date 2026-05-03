@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Gift, Check, ShoppingBag } from "lucide-react";
-import { trackAndRedirect } from "@/lib/track";
+import { Gift, Check } from "lucide-react";
 
 const highlights = [
   "Premium gold-dotted packaging box",
@@ -71,15 +70,6 @@ export default function Packaging() {
                 </li>
               ))}
             </ul>
-
-            <button
-              onClick={() => trackAndRedirect("https://www.amazon.com/dp/placeholder", "premium-packaging-buy")}
-              id="packaging-buy-btn"
-              className="btn-amazon inline-flex items-center gap-3"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              Buy on Amazon
-            </button>
           </div>
         </div>
       </div>

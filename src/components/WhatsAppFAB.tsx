@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-const WHATSAPP_NUMBER = "919999999999";
+const WHATSAPP_NUMBER = "917709219444";
 const DEFAULT_MESSAGE = encodeURIComponent(
   "Hi! I'm interested in Essenzae Laux products. Can you help me?"
 );
