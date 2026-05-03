@@ -33,6 +33,8 @@ export const metadata: Metadata = {
   },
 };
 
+import WhatsAppFAB from "@/components/WhatsAppFAB";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -40,7 +42,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="min-h-screen antialiased">{children}</body>
+      <body className="min-h-screen antialiased">
+        {children}
+        <WhatsAppFAB />
+      </body>
     </html>
   );
 }
