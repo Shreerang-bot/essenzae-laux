@@ -76,7 +76,7 @@ export default function CollectionGrid({
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {products.map((product) => {
             const currentImgIndex = imageIndexes[product.id] || 0;
             const hasMultipleImages = product.images.length > 1;
@@ -147,8 +147,8 @@ export default function CollectionGrid({
                   )}
 
                   {/* Price Badge + Discount */}
-                  <div className="absolute bottom-3 left-3 z-20 flex items-baseline gap-2">
-                    <span className="font-[var(--font-playfair)] text-2xl font-bold text-cream drop-shadow-lg">
+                  <div className="absolute bottom-2 left-2 sm:bottom-3 sm:left-3 z-20 flex items-baseline gap-1.5 sm:gap-2">
+                    <span className="font-[var(--font-playfair)] text-lg sm:text-2xl font-bold text-cream drop-shadow-lg">
                       ₹{product.price}
                     </span>
                     {discount > 0 && (
@@ -165,11 +165,11 @@ export default function CollectionGrid({
                 </div>
 
                 {/* Content Section */}
-                <div className="p-5 md:p-6 flex flex-col flex-1 relative z-20">
-                  <h3 className="font-[var(--font-playfair)] text-xl font-bold text-cream mb-2 group-hover:text-gold transition-colors line-clamp-1">
+                <div className="p-3 sm:p-5 md:p-6 flex flex-col flex-1 relative z-20">
+                  <h3 className="font-[var(--font-playfair)] text-sm sm:text-xl font-bold text-cream mb-1 sm:mb-2 group-hover:text-gold transition-colors line-clamp-1">
                     {product.name}
                   </h3>
-                  <p className="text-cream/50 text-sm leading-relaxed font-light line-clamp-2 flex-1">
+                  <p className="text-cream/50 text-xs sm:text-sm leading-relaxed font-light line-clamp-2 flex-1 hidden sm:block">
                     {product.description}
                   </p>
                   <div className="mt-4 flex items-center gap-2 text-gold text-sm font-medium">

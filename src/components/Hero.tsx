@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ShoppingBag, Star, Sparkles } from "lucide-react";
+import { ShoppingBag, Sparkles } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -37,38 +37,8 @@ export default function Hero() {
 
           {/* Subheadline */}
           <p className="text-cream/70 text-lg md:text-xl max-w-lg mx-auto lg:mx-0 leading-relaxed animate-fade-in-up delay-200 font-light">
-            A premium hanging fragrance diffuser crafted with a hand-blown glass
-            bottle and natural wooden lid — designed exclusively for your{" "}
-            <span className="text-gold font-medium">car</span>.
+            Premium fragrance diffusers crafted with hand-blown glass bottles and natural essential oils — <span className="text-gold font-medium">REED diffusers</span> for your home and <span className="text-gold font-medium">car diffusers</span> for the road.
           </p>
-
-          {/* Rating */}
-          <div className="flex items-center gap-3 justify-center lg:justify-start animate-fade-in-up delay-300">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className="w-5 h-5 text-gold fill-gold"
-                />
-              ))}
-            </div>
-            <span className="text-cream/60 text-sm">
-              4.8 / 5 · 1,200+ happy customers
-            </span>
-          </div>
-
-          {/* Price + CTA */}
-          <div className="flex flex-col sm:flex-row items-center gap-6 justify-center lg:justify-start animate-fade-in-up delay-400">
-            <div className="flex items-baseline gap-2">
-              <span className="text-cream/40 line-through text-lg">₹699</span>
-              <span className="font-[var(--font-playfair)] text-4xl md:text-5xl font-bold text-cream">
-                ₹399
-              </span>
-              <span className="bg-green-500/20 text-green-400 text-xs font-bold px-2 py-1 rounded-full">
-                43% OFF
-              </span>
-            </div>
-          </div>
 
           <div className="animate-fade-in-up delay-500">
             <a

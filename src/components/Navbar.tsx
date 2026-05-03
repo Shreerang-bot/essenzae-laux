@@ -54,11 +54,10 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 shadow-sm ${
-        scrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 shadow-sm ${scrolled
           ? "bg-cream/95 backdrop-blur-md py-3"
           : "bg-cream/90 backdrop-blur-md py-5"
-      }`}
+        }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo */}
@@ -79,6 +78,14 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
+          {/* Home */}
+          <Link
+            href="/"
+            className="text-sm font-medium tracking-wide text-forest/80 hover:text-gold transition-colors duration-300"
+          >
+            Home
+          </Link>
+
           {/* Collections Dropdown */}
           <div
             ref={dropdownRef}
@@ -93,9 +100,8 @@ export default function Navbar() {
             >
               Collections
               <ChevronDown
-                className={`w-4 h-4 transition-transform duration-200 ${
-                  dropdownOpen ? "rotate-180" : ""
-                }`}
+                className={`w-4 h-4 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""
+                  }`}
               />
             </button>
 
@@ -152,6 +158,15 @@ export default function Navbar() {
       {menuOpen && (
         <div className="md:hidden bg-cream/98 backdrop-blur-md border-t border-forest/10 animate-fade-in shadow-lg">
           <div className="px-6 py-4 flex flex-col gap-1">
+            {/* Home */}
+            <Link
+              href="/"
+              onClick={() => setMenuOpen(false)}
+              className="text-forest/80 text-sm font-medium py-2 hover:text-gold transition-colors"
+            >
+              Home
+            </Link>
+
             {/* Collections Expandable */}
             <button
               onClick={() => setMobileCollectionsOpen(!mobileCollectionsOpen)}
@@ -159,9 +174,8 @@ export default function Navbar() {
             >
               Collections
               <ChevronDown
-                className={`w-4 h-4 transition-transform duration-200 ${
-                  mobileCollectionsOpen ? "rotate-180" : ""
-                }`}
+                className={`w-4 h-4 transition-transform duration-200 ${mobileCollectionsOpen ? "rotate-180" : ""
+                  }`}
               />
             </button>
             {mobileCollectionsOpen && (
