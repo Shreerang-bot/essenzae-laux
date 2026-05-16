@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
@@ -59,6 +59,33 @@ export default function ProductDetail() {
   const [activeImage, setActiveImage] = useState(0);
   const [activeTab, setActiveTab] = useState<"description" | "reviews">("description");
   const relatedScrollRef = useRef<HTMLDivElement>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  const handleGalleryTouchStart = useCallback((e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  }, []);
+
+  const handleGalleryTouchEnd = useCallback(
+    (e: React.TouchEvent) => {
+      if (touchStartX.current === null || !product) return;
+      const endX = e.changedTouches[0].clientX;
+      const diff = touchStartX.current - endX;
+      const SWIPE_THRESHOLD = 40;
+      if (Math.abs(diff) > SWIPE_THRESHOLD) {
+        if (diff > 0) {
+          // swiped left → next
+          setActiveImage((prev) => (prev + 1) % product.images.length);
+        } else {
+          // swiped right → prev
+          setActiveImage((prev) =>
+            prev === 0 ? product.images.length - 1 : prev - 1
+          );
+        }
+      }
+      touchStartX.current = null;
+    },
+    [product]
+  );
 
   useEffect(() => {
     fetch("/api/products", { cache: "no-store" })
@@ -140,7 +167,11 @@ export default function ProductDetail() {
             {/* Image Gallery */}
             <div className="flex-1 lg:max-w-[55%]">
               {/* Main Image */}
-              <div className="relative aspect-square rounded-3xl overflow-hidden bg-forest/5 border border-cream-dark/30 mb-4">
+              <div
+                className="relative aspect-square rounded-3xl overflow-hidden bg-forest/5 border border-cream-dark/30 mb-4"
+                onTouchStart={product.images.length > 1 ? handleGalleryTouchStart : undefined}
+                onTouchEnd={product.images.length > 1 ? handleGalleryTouchEnd : undefined}
+              >
                 {product.images[activeImage] ? (
                   <img
                     src={product.images[activeImage]}
