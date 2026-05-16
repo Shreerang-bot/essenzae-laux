@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
@@ -29,9 +29,10 @@ export default function CollectionGrid({
   badge = "Collection",
 }: CollectionGridProps) {
   const [imageIndexes, setImageIndexes] = useState<Record<string, number>>({});
+  const touchStartRef = useRef<Record<string, number>>({});
 
   const handleImageNav = (
-    e: React.MouseEvent,
+    e: React.MouseEvent | React.TouchEvent,
     productId: string,
     totalImages: number,
     direction: "prev" | "next"
@@ -50,6 +51,41 @@ export default function CollectionGrid({
       }
     });
   };
+
+  const handleTouchStart = useCallback(
+    (productId: string, e: React.TouchEvent) => {
+      touchStartRef.current[productId] = e.touches[0].clientX;
+    },
+    []
+  );
+
+  const handleTouchEnd = useCallback(
+    (productId: string, totalImages: number, e: React.TouchEvent) => {
+      const startX = touchStartRef.current[productId];
+      if (startX === undefined) return;
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+      const SWIPE_THRESHOLD = 40;
+      if (Math.abs(diff) > SWIPE_THRESHOLD) {
+        e.preventDefault();
+        setImageIndexes((prev) => {
+          const current = prev[productId] || 0;
+          if (diff > 0) {
+            // swiped left → next image
+            return { ...prev, [productId]: (current + 1) % totalImages };
+          } else {
+            // swiped right → prev image
+            return {
+              ...prev,
+              [productId]: current === 0 ? totalImages - 1 : current - 1,
+            };
+          }
+        });
+      }
+      delete touchStartRef.current[productId];
+    },
+    []
+  );
 
   return (
     <section className="py-24 md:py-32 bg-forest relative overflow-hidden">
@@ -91,7 +127,24 @@ export default function CollectionGrid({
                 className="product-card group glass rounded-3xl overflow-hidden hover:bg-white/5 transition-all duration-500 hover:-translate-y-2 border border-cream/5 hover:border-gold/20 flex flex-col cursor-pointer"
               >
                 {/* Image Section */}
-                <div className="relative aspect-[4/5] bg-forest-dark/30 overflow-hidden">
+                <div
+                  className="relative aspect-[4/5] bg-forest-dark/30 overflow-hidden"
+                  onTouchStart={
+                    hasMultipleImages
+                      ? (e) => handleTouchStart(product.id, e)
+                      : undefined
+                  }
+                  onTouchEnd={
+                    hasMultipleImages
+                      ? (e) =>
+                          handleTouchEnd(
+                            product.id,
+                            product.images.length,
+                            e
+                          )
+                      : undefined
+                  }
+                >
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-forest-dark/80 z-10 pointer-events-none" />
 
                   {product.images[currentImgIndex] ? (
@@ -106,26 +159,26 @@ export default function CollectionGrid({
                     </div>
                   )}
 
-                  {/* Image Navigation */}
+                  {/* Image Navigation — always visible on mobile, hover on desktop */}
                   {hasMultipleImages && (
-                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-1 sm:px-2 z-20 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                       <button
                         onClick={(e) =>
                           handleImageNav(e, product.id, product.images.length, "prev")
                         }
-                        className="w-8 h-8 rounded-full bg-forest/80 backdrop-blur text-cream flex items-center justify-center hover:bg-gold hover:text-forest transition-colors shadow-lg"
+                        className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-forest/80 backdrop-blur text-cream flex items-center justify-center hover:bg-gold hover:text-forest transition-colors shadow-lg"
                         aria-label="Previous image"
                       >
-                        <ChevronLeft className="w-4 h-4" />
+                        <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4" />
                       </button>
                       <button
                         onClick={(e) =>
                           handleImageNav(e, product.id, product.images.length, "next")
                         }
-                        className="w-8 h-8 rounded-full bg-forest/80 backdrop-blur text-cream flex items-center justify-center hover:bg-gold hover:text-forest transition-colors shadow-lg"
+                        className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-forest/80 backdrop-blur text-cream flex items-center justify-center hover:bg-gold hover:text-forest transition-colors shadow-lg"
                         aria-label="Next image"
                       >
-                        <ChevronRight className="w-4 h-4" />
+                        <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   )}
